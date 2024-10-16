@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         x1 = -c/b;
         cout << "Rownanie jest liniowe i ma 1 rozwiazanie rowne: " << x1 << endl;
     }
-    else if (c == 0){
+    else if (c == 0.0){
         cout << "Rownanie jest liniowe i ma nieskonczenie wiele rozwiazan!" << endl;
     }
     else{
@@ -34,12 +34,12 @@ int main(int argc, char *argv[])
 
  delta = b * b - 4 * a * c;
 
- if (delta < 0) cout << "Rownanie nie ma pierwiasrkow!" << endl;
+ if (delta < 0.0) cout << "Rownanie nie ma pierwiasrkow!" << endl;
  else if (delta == 0){
         x1 = -b/(2*a);
         cout << "Rownanie ma 1 pierwiastek rowny: " << x1 << endl;
  }
- else if (delta > 0){
+ else if (delta > 0.0){
     double pDelta = sqrt(delta);
     x1 = (-b+pDelta)/(2*a);
     x2 = (-b-pDelta)/(2*a);
