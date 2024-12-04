@@ -5,12 +5,12 @@
 
 using namespace std;
 
-// ---------- DEFINE STRUCTURE ----------
 struct Student{
     string name;
     string email;
     int id;
     double gpa;
+    Student* next;
 
     Student(){
         name = "unknown";
@@ -35,91 +35,47 @@ struct Student{
     }
 };
 
-// ---------- DEFINE NODE CLASS ----------
-class Node {
-public:
-    Student* data;
-    Node* next;
+class LinkedList{
+    public:
+        Student* head;
+        Student* last;
 
-    Node(Student* student) {
-        data = student;
-        next = nullptr;
-    }
-
-    ~Node() {
-        delete data;
-    }
-};
-
-// ---------- DEFINE LINKED LIST CLASS ----------
-class LinkedList {
-    private:
-        Node* head;
-
-public:
-    LinkedList() {
-        head = nullptr;
-    }
-
-    ~LinkedList() {
-        while (head != nullptr) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
+    public:
+        LinkedList(){
+            head = NULL;
+            last = NULL;
         }
-    }
 
-    void append(Student* student) {
-        Node* newNode = new Node(student);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* temp = head;
-            while (temp->next != nullptr) {
+        void addHead(Student* newStudent){
+            if (head != NULL){
+                newStudent->next = head;
+                head = newStudent;
+            }
+            else {
+                head = last = newStudent;
+                newStudent->next = NULL;
+            }
+        }
+
+        void addLast(Student* newStudent){
+            newStudent->next = NULL;
+            if (last != NULL){
+                last->next = newStudent;
+                last = newStudent;
+            }
+            else {
+                addHead(newStudent);
+            }
+        }
+
+        void printAll(){
+            Student* temp = head;
+
+            while(temp != NULL){
+                temp->print();
                 temp = temp->next;
             }
-            temp->next = newNode;
         }
-    }
-
-    void prepend(Student* student) {
-        Node* newNode = new Node(student);
-        newNode->next = head;
-        head = newNode;
-    }
-
-    void remove(int studentId) {
-        if (head == nullptr) return;
-
-        if (head->data->id == studentId) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-            return;
-        }
-
-        Node* temp = head;
-        while (temp->next != nullptr && temp->next->data->id != studentId) {
-            temp = temp->next;
-        }
-
-        if (temp->next == nullptr) {
-            cout << "Student z ID " << studentId << " nie istnieje w liœcie.\n";
-            return;
-        }
-
-        Node* nodeToDelete = temp->next;
-        temp->next = temp->next->next;
-        delete nodeToDelete;
-    }
-
-    void display() {
-        Node* temp = head;
-        while (temp != nullptr) {
-            temp->data->print();
-            temp = temp->next;
-        }
-    }
 };
 
 // ---------- MAIN ----------
@@ -130,7 +86,8 @@ int main(int argc, char *argv[]){
     Student *student2 = new Student("Peter", "peter@p.lodz.pl", 124, 4.0);
     student2->print();
 
-    Student *student3 = student2; // pointer copy
+    //Student *student3 = student2; // pointer copy
+    Student* student3 = new Student("M.R", "m.r@p.lodz.pl", 125, 5.0);
     student3->print();
     student3->id = -1;
     student3->print();
@@ -143,13 +100,28 @@ int main(int argc, char *argv[]){
 
     student1->print();
 
-    cout << "------------- Lista -------------" << endl;
+    cout << "----- LISTA -----" << endl;
 
-    LinkedList myList;
-    myList.append(student1);
-    myList.append(student2);
+    LinkedList* myList = new LinkedList();
+    //myList->head = student2;
+    //myList->head->print();
 
-    myList.display();
+    myList->addHead(student1);
+    myList->addHead(student3);
+    myList->addHead(student2);
+
+    myList->printAll();
+
+    cout << "----- OSTATNI ELEMENT LISTY -----" << endl;
+    myList->last->print();
+
+    Student* student4 = new Student("J.B", "j.b@p.lodz.pl", 126, 2.0);
+    Student* student5 = new Student("E.M", "e.m@p.lodz.pl", 127, 3.0);
+    myList->addLast(student5);
+    myList->addLast(student4);
+
+    cout << "----- LISTA -----" << endl;
+    myList->printAll();
 
     return 0;
 }
